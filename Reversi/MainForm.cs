@@ -22,5 +22,10 @@ namespace Reversi
         {
             Application.Exit();
         }
+
+        private void optionsMenuItem_Click(object sender, EventArgs e)
+        {
+            new OptionsForm().ShowDialog();
+        }
     }
 }
