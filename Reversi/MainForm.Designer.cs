@@ -38,7 +38,6 @@
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.exitMenuItem = new System.Windows.Forms.MenuItem();
             this.reversiBoard2 = new Reversi.ReversiBoard();
-            this.reversiBoard1 = new Reversi.ReversiBoard();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -95,32 +94,22 @@
             // 
             // reversiBoard2
             // 
+            this.reversiBoard2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.reversiBoard2.Game = null;
-            this.reversiBoard2.Location = new System.Drawing.Point(12, 32);
+            this.reversiBoard2.Location = new System.Drawing.Point(0, 0);
             this.reversiBoard2.Name = "reversiBoard2";
             this.reversiBoard2.Player1Color = System.Drawing.Color.Black;
             this.reversiBoard2.Player2Color = System.Drawing.Color.White;
-            this.reversiBoard2.Size = new System.Drawing.Size(530, 370);
+            this.reversiBoard2.Size = new System.Drawing.Size(554, 351);
             this.reversiBoard2.TabIndex = 1;
             this.reversiBoard2.Load += new System.EventHandler(this.reversiBoard2_Load);
-            // 
-            // reversiBoard1
-            // 
-            this.reversiBoard1.Game = null;
-            this.reversiBoard1.Location = new System.Drawing.Point(143, 190);
-            this.reversiBoard1.Name = "reversiBoard1";
-            this.reversiBoard1.Player1Color = System.Drawing.Color.Black;
-            this.reversiBoard1.Player2Color = System.Drawing.Color.White;
-            this.reversiBoard1.Size = new System.Drawing.Size(608, 366);
-            this.reversiBoard1.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(554, 393);
+            this.ClientSize = new System.Drawing.Size(554, 351);
             this.Controls.Add(this.reversiBoard2);
-            this.Controls.Add(this.reversiBoard1);
             this.Menu = this.mainMenu1;
             this.Name = "MainForm";
             this.Text = "Form1";
@@ -138,7 +127,7 @@
         private System.Windows.Forms.MenuItem exitMenuItem;
         private System.Windows.Forms.MenuItem menuItem6;
         private System.Windows.Forms.MenuItem menuItem3;
-        private ReversiBoard reversiBoard1;
+
         private ReversiBoard reversiBoard2;
     }
 }

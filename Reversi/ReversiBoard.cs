@@ -28,6 +28,8 @@ namespace Reversi
             if ( Game == null )
                 return;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
             for ( int y = 0; y < Game.BoardSize; y++ )
             {
                 for ( int x = 0; x < Game.BoardSize; x++ )
