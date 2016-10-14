@@ -16,6 +16,7 @@ namespace Reversi
         {
             InitializeComponent();
             var r = new ReversiGame(6);
+            reversiBoard2.Game = r;
         }
 
         private void exitMenuItem_Click(object sender, EventArgs e)
@@ -26,6 +27,11 @@ namespace Reversi
         private void optionsMenuItem_Click(object sender, EventArgs e)
         {
             new OptionsForm().ShowDialog();
+        }
+
+        private void reversiBoard2_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
