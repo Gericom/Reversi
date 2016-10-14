@@ -50,7 +50,8 @@ namespace Reversi
 
         public ReversiGame(int boardSize)
         {
-            BoardSize = boardSize;
+            //force multiple of 2
+            BoardSize = (boardSize + 1) & ~1;
             mFields = new ReversiField[BoardSize, BoardSize];
             for (int y = 0; y < BoardSize; y++)
             {
