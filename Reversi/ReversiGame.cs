@@ -140,5 +140,10 @@ namespace Reversi
             }
             return count;
         }
+
+        public ReversiField this[int x, int y]
+        {
+            get { return mFields[x, y]; }
+        }
     }
 }

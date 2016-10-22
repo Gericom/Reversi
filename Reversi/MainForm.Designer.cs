@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+            this.mainMenu1 = new Reversi.MainMenu(this.components);
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.newGameMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem6 = new System.Windows.Forms.MenuItem();
@@ -100,15 +100,14 @@
             this.reversiBoard2.Name = "reversiBoard2";
             this.reversiBoard2.Player1Color = System.Drawing.Color.Black;
             this.reversiBoard2.Player2Color = System.Drawing.Color.White;
-            this.reversiBoard2.Size = new System.Drawing.Size(554, 351);
+            this.reversiBoard2.Size = new System.Drawing.Size(617, 464);
             this.reversiBoard2.TabIndex = 1;
-            this.reversiBoard2.Load += new System.EventHandler(this.reversiBoard2_Load);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(554, 351);
+            this.ClientSize = new System.Drawing.Size(617, 464);
             this.Controls.Add(this.reversiBoard2);
             this.Menu = this.mainMenu1;
             this.Name = "MainForm";
@@ -119,7 +118,7 @@
 
         #endregion
 
-        private System.Windows.Forms.MainMenu mainMenu1;
+        private MainMenu mainMenu1;
         private System.Windows.Forms.MenuItem menuItem1;
         private System.Windows.Forms.MenuItem newGameMenuItem;
         private System.Windows.Forms.MenuItem optionsMenuItem;

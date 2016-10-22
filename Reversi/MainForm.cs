@@ -28,10 +28,5 @@ namespace Reversi
         {
             new OptionsForm().ShowDialog();
         }
-
-        private void reversiBoard2_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }
