@@ -22,6 +22,12 @@ namespace Reversi
 		public delegate void OnPlayerSwitchEventHandler(Turn newPlayer);
 		public event OnPlayerSwitchEventHandler PlayerSwitch;
 
+        public delegate void OnPassRequiredEventHandler();
+        public event OnPassRequiredEventHandler PassRequired;
+
+        public delegate void OnGameEndEventHandler();
+        public event OnGameEndEventHandler GameEnd;
+
         public ReversiBoard()
         {
             InitializeComponent();
@@ -31,10 +37,46 @@ namespace Reversi
 
         public Color Player1Color { get; set; } = Color.Black;
         public Color Player2Color { get; set; } = Color.White;
-        [Browsable(false)]
-        public ReversiGame Game { get; set; }
 
-		private void GetBoardDimension(out int xOffset, out int yOffset, out int fieldSize, out int fontsize)
+        private ReversiGame mGame;
+
+        [Browsable(false)]
+        public ReversiGame Game
+        {
+            get
+            {
+                return mGame;
+            }
+            set
+            {
+                mGame = value;
+                WhichPlayersTurn = Turn.Player1;
+                if (mGame != null)
+                    CalculateFieldEnclosures();
+            }
+        }
+
+        private ReversiGame.ReversiField[,][] mEnclosuresForFields = null;
+
+        private void CalculateFieldEnclosures()
+        {
+            mEnclosuresForFields = new ReversiGame.ReversiField[Game.BoardSize, Game.BoardSize][];
+            bool shouldpass = true;
+            for (int y = 0; y < Game.BoardSize; y++)
+            {
+                for (int x = 0; x < Game.BoardSize; x++)
+                {
+                    mEnclosuresForFields[x, y] =
+                        Game.GetEnclosedFields(x, y, WhichPlayersTurn == Turn.Player1 ? ReversiGame.ReversiField.FieldContent.Player1 : ReversiGame.ReversiField.FieldContent.Player2);
+                    if (mEnclosuresForFields[x, y].Length > 0)
+                        shouldpass = false;
+                }
+            }
+            if (shouldpass && PassRequired != null)
+                PassRequired.Invoke();
+        }
+
+        private void GetBoardDimension(out int xOffset, out int yOffset, out int fieldSize, out int fontsize)
 		{
 			int size = (Width < Height ? Width : Height);
 			int borderSize = size / 15;
@@ -47,17 +89,8 @@ namespace Reversi
 
         private void ReversiBoard_Paint(object sender, PaintEventArgs e)
         {
-            if (Game == null)
+            if (Game == null || mEnclosuresForFields == null)
                 return;
-            ReversiGame.ReversiField[,][] enclosuresForFields = new ReversiGame.ReversiField[Game.BoardSize, Game.BoardSize][];
-            for (int y = 0; y < Game.BoardSize; y++)
-            {
-                for (int x = 0; x < Game.BoardSize; x++)
-                {
-                    enclosuresForFields[x, y] = 
-                        Game.GetEnclosedFields(x, y, WhichPlayersTurn == Turn.Player1 ? ReversiGame.ReversiField.FieldContent.Player1 : ReversiGame.ReversiField.FieldContent.Player2);
-                }
-            }
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
@@ -98,10 +131,10 @@ namespace Reversi
                                     Color.FromArgb((int)(Player2Color.R * 0.75), (int)(Player2Color.G * 0.75), (int)(Player2Color.B * 0.75))),
                                  0 + fieldSize / 16,fieldSize / 16, fieldSize - fieldSize / 8, fieldSize - fieldSize / 8);
                     }
-					if (enclosuresForFields[x, y].Length > 0)
+					if (mEnclosuresForFields[x, y].Length > 0)
                     {
                         e.Graphics.FillEllipse(Brushes.LightGreen,  0 + fieldSize / 4,    + fieldSize / 4, fieldSize - fieldSize / 2, fieldSize - fieldSize / 2);
-                        e.Graphics.DrawString(enclosuresForFields[x, y].Length.ToString(), new Font("Segoe UI Semibold", fontsize), Brushes.Black,
+                        e.Graphics.DrawString(mEnclosuresForFields[x, y].Length.ToString(), new Font("Segoe UI Semibold", fontsize), Brushes.Black,
                             new RectangleF( 0 + fieldSize / 4,    + fieldSize / 4, fieldSize - fieldSize / 2, fieldSize - fieldSize / 2),
                             new StringFormat() { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Center });
                     }
@@ -139,11 +172,9 @@ namespace Reversi
                 f.Reverse();
             Game[fieldx, fieldy].Content = WhichPlayersTurn == Turn.Player1 ? ReversiGame.ReversiField.FieldContent.Player1 : ReversiGame.ReversiField.FieldContent.Player2;
             WhichPlayersTurn = WhichPlayersTurn == Turn.Player1 ? Turn.Player2 : Turn.Player1;
-			if ( PlayerSwitch != null )
+            CalculateFieldEnclosures();
+            if ( PlayerSwitch != null )
 				PlayerSwitch.Invoke(WhichPlayersTurn);
-
-
-
             Invalidate();
         }
     }
