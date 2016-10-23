@@ -19,6 +19,9 @@ namespace Reversi
             Player2
         }
 
+		public delegate void OnPlayerSwitchEventHandler(Turn newPlayer);
+		public event OnPlayerSwitchEventHandler PlayerSwitch;
+
         public ReversiBoard()
         {
             InitializeComponent();
@@ -30,6 +33,17 @@ namespace Reversi
         public Color Player2Color { get; set; } = Color.White;
         [Browsable(false)]
         public ReversiGame Game { get; set; }
+
+		private void GetBoardDimension(out int xOffset, out int yOffset, out int fieldSize, out int fontsize)
+		{
+			int size = (Width < Height ? Width : Height);
+			int borderSize = size / 15;
+			size -= borderSize * 2;
+			fieldSize = size / Game.BoardSize;
+			fontsize = fieldSize / 6;
+			xOffset = (Width - fieldSize * Game.BoardSize) / 2;
+			yOffset = (Height - fieldSize * Game.BoardSize) / 2;
+		}
 
         private void ReversiBoard_Paint(object sender, PaintEventArgs e)
         {
@@ -49,52 +63,54 @@ namespace Reversi
             e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             int size = (Width < Height ? Width : Height);
-            int borderSize = size / 30;
             e.Graphics.FillRectangle(
                 new HatchBrush(HatchStyle.WideDownwardDiagonal, Color.FromArgb(201, 115, 64), Color.FromArgb(140, 73, 30)),
-                (Width - size) / 2, (Height - size) / 2, size, size);
-            size -= borderSize * 2;
-            int fieldSize = size / Game.BoardSize;
-            int fontsize = fieldSize / 6;
-            int xOffset = (Width - fieldSize * Game.BoardSize) / 2;
-            int yOffset = (Height - fieldSize * Game.BoardSize) / 2;
+                (Width - size) / 2 + size / 30, (Height - size) / 2 + size / 30, size - size / 15, size - size / 15);
+			int fieldSize, fontsize, xOffset, yOffset;
+			GetBoardDimension(out xOffset, out yOffset, out fieldSize, out fontsize);
+			e.Graphics.TranslateTransform(xOffset, yOffset);
             for (int y = 0; y < Game.BoardSize; y++)
             {
-                for (int x = 0; x < Game.BoardSize; x++)
+				var s = e.Graphics.Save();
+				for (int x = 0; x < Game.BoardSize; x++)
                 {
+					
                     if (((x & 1) ^ (y & 1)) == 1)
-                        e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0, 143, 54)), xOffset + x * fieldSize, yOffset + y * fieldSize, fieldSize, fieldSize);
+                        e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0, 143, 54)), 0, 0, fieldSize, fieldSize);
                     else
-                        e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0, 183, 54)), xOffset + x * fieldSize, yOffset + y * fieldSize, fieldSize, fieldSize);
+                        e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0, 183, 54)),0, 0, fieldSize, fieldSize);
                     if (Game[x, y].Content != ReversiGame.ReversiField.FieldContent.Empty)
                     {
                         if (Game[x, y].Content == ReversiGame.ReversiField.FieldContent.Player1)
                             e.Graphics.FillEllipse(
                                 new LinearGradientBrush(
-                                    new Point(xOffset + x * fieldSize - fieldSize / 2, yOffset + y * fieldSize - fieldSize / 2),
-                                    new Point(xOffset + x * fieldSize + fieldSize, yOffset + y * fieldSize + fieldSize),
+                                    new Point( 0 - fieldSize / 2,    - fieldSize / 2),
+                                    new Point( 0 + fieldSize,     fieldSize),
                                     Color.White,
                                     Color.FromArgb((int)(Player1Color.R * 0.75), (int)(Player1Color.G * 0.75), (int)(Player1Color.B * 0.75))),
-                                xOffset + x * fieldSize + fieldSize / 16, yOffset + y * fieldSize + fieldSize / 16, fieldSize - fieldSize / 8, fieldSize - fieldSize / 8);
+                                0 + fieldSize / 16,    + fieldSize / 16, fieldSize - fieldSize / 8, fieldSize - fieldSize / 8);
                         else
                             e.Graphics.FillEllipse(
                                 new LinearGradientBrush(
-                                    new Point(xOffset + x * fieldSize - fieldSize / 2, yOffset + y * fieldSize - fieldSize / 2),
-                                    new Point(xOffset + x * fieldSize + fieldSize, yOffset + y * fieldSize + fieldSize),
+                                    new Point( 0 - fieldSize / 2,    - fieldSize / 2),
+                                    new Point( 0 + fieldSize,    + fieldSize),
                                     Color.White,
                                     Color.FromArgb((int)(Player2Color.R * 0.75), (int)(Player2Color.G * 0.75), (int)(Player2Color.B * 0.75))),
-                                xOffset + x * fieldSize + fieldSize / 16, yOffset + y * fieldSize + fieldSize / 16, fieldSize - fieldSize / 8, fieldSize - fieldSize / 8);
+                                 0 + fieldSize / 16,fieldSize / 16, fieldSize - fieldSize / 8, fieldSize - fieldSize / 8);
                     }
-                    if (enclosuresForFields[x, y].Length > 0)
+					if (enclosuresForFields[x, y].Length > 0)
                     {
-                        e.Graphics.FillEllipse(Brushes.LightGreen, xOffset + x * fieldSize + fieldSize / 4, yOffset + y * fieldSize + fieldSize / 4, fieldSize - fieldSize / 2, fieldSize - fieldSize / 2);
+                        e.Graphics.FillEllipse(Brushes.LightGreen,  0 + fieldSize / 4,    + fieldSize / 4, fieldSize - fieldSize / 2, fieldSize - fieldSize / 2);
                         e.Graphics.DrawString(enclosuresForFields[x, y].Length.ToString(), new Font("Segoe UI Semibold", fontsize), Brushes.Black,
-                            new RectangleF(xOffset + x * fieldSize + fieldSize / 4, yOffset + y * fieldSize + fieldSize / 4, fieldSize - fieldSize / 2, fieldSize - fieldSize / 2),
+                            new RectangleF( 0 + fieldSize / 4,    + fieldSize / 4, fieldSize - fieldSize / 2, fieldSize - fieldSize / 2),
                             new StringFormat() { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Center });
                     }
-                 }
-            }
-        }
+					e.Graphics.TranslateTransform(fieldSize, 0);
+				}
+				e.Graphics.Restore(s);
+				e.Graphics.TranslateTransform(0, fieldSize);
+			}
+		}
 
         private void ReversiBoard_Resize(object sender, EventArgs e)
         {
@@ -108,13 +124,9 @@ namespace Reversi
 
         private void ReversiBoard_MouseClick(object sender, MouseEventArgs e)
         {
-            int size = (Width < Height ? Width : Height);
-            int borderSize = size / 30;
-            size -= borderSize * 2;
-            int fieldSize = size / Game.BoardSize;
-            int xOffset = (Width - fieldSize * Game.BoardSize) / 2;
-            int yOffset = (Height - fieldSize * Game.BoardSize) / 2;
-            int realx = e.X - xOffset;
+			int fieldSize, fontsize, xOffset, yOffset;
+			GetBoardDimension(out xOffset, out yOffset, out fieldSize, out fontsize);
+			int realx = e.X - xOffset;
             int realy = e.Y - yOffset;
             int fieldx = realx / fieldSize;
             int fieldy = realy / fieldSize;
@@ -127,7 +139,13 @@ namespace Reversi
                 f.Reverse();
             Game[fieldx, fieldy].Content = WhichPlayersTurn == Turn.Player1 ? ReversiGame.ReversiField.FieldContent.Player1 : ReversiGame.ReversiField.FieldContent.Player2;
             WhichPlayersTurn = WhichPlayersTurn == Turn.Player1 ? Turn.Player2 : Turn.Player1;
+			if ( PlayerSwitch != null )
+				PlayerSwitch.Invoke(WhichPlayersTurn);
+
+
+
             Invalidate();
         }
     }
 }
+

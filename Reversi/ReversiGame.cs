@@ -64,28 +64,6 @@ namespace Reversi
             mFields[BoardSize / 2, BoardSize / 2 - 1].Content = ReversiField.FieldContent.Player2;
             mFields[BoardSize / 2 - 1, BoardSize / 2].Content = ReversiField.FieldContent.Player2;
             mFields[BoardSize / 2, BoardSize / 2].Content = ReversiField.FieldContent.Player1;
-            /*mFields[3, 0].Content = ReversiField.FieldContent.Player1;
-            mFields[4, 0].Content = ReversiField.FieldContent.Player1;
-            mFields[1, 1].Content = ReversiField.FieldContent.Player2;
-            mFields[2, 1].Content = ReversiField.FieldContent.Player1;
-            mFields[3, 1].Content = ReversiField.FieldContent.Player1;
-            mFields[4, 1].Content = ReversiField.FieldContent.Player1;
-            mFields[5, 1].Content = ReversiField.FieldContent.Player2;
-            mFields[1, 2].Content = ReversiField.FieldContent.Player1;
-            mFields[2, 2].Content = ReversiField.FieldContent.Player2;
-            mFields[3, 2].Content = ReversiField.FieldContent.Player1;
-            mFields[4, 2].Content = ReversiField.FieldContent.Player1;
-            mFields[5, 2].Content = ReversiField.FieldContent.Player2;
-            mFields[0, 3].Content = ReversiField.FieldContent.Player1;
-            mFields[1, 3].Content = ReversiField.FieldContent.Player1;
-            mFields[2, 3].Content = ReversiField.FieldContent.Player1;
-            mFields[3, 3].Content = ReversiField.FieldContent.Player1;
-            mFields[4, 3].Content = ReversiField.FieldContent.Player1;
-            mFields[5, 3].Content = ReversiField.FieldContent.Player2;
-            mFields[3, 4].Content = ReversiField.FieldContent.Player2;
-            mFields[4, 4].Content = ReversiField.FieldContent.Player1;
-            mFields[2, 5].Content = ReversiField.FieldContent.Player2;
-            ReversiField[] fields = GetEnclosedFields(2, 4, ReversiField.FieldContent.Player2);*/
         }
 
         public ReversiField[] GetEnclosedFields(int x, int y, ReversiField.FieldContent player)
@@ -140,6 +118,17 @@ namespace Reversi
             }
             return count;
         }
+
+		/*public void GameOver()
+		{
+			if (ReversiField.FieldContent.Player1 > ReversiField.FieldContent.Player2)
+				//show message on screen
+			else
+				//show other message
+
+			//start new game
+		}
+		*/
 
         public ReversiField this[int x, int y]
         {
