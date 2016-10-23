@@ -47,6 +47,7 @@ namespace Reversi
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             e.Graphics.CompositingQuality = CompositingQuality.HighQuality;
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             int size = (Width < Height ? Width : Height);
             int borderSize = size / 30;
             e.Graphics.FillRectangle(
@@ -54,6 +55,7 @@ namespace Reversi
                 (Width - size) / 2, (Height - size) / 2, size, size);
             size -= borderSize * 2;
             int fieldSize = size / Game.BoardSize;
+            int fontsize = fieldSize / 6;
             int xOffset = (Width - fieldSize * Game.BoardSize) / 2;
             int yOffset = (Height - fieldSize * Game.BoardSize) / 2;
             for (int y = 0; y < Game.BoardSize; y++)
@@ -84,8 +86,13 @@ namespace Reversi
                                 xOffset + x * fieldSize + fieldSize / 16, yOffset + y * fieldSize + fieldSize / 16, fieldSize - fieldSize / 8, fieldSize - fieldSize / 8);
                     }
                     if (enclosuresForFields[x, y].Length > 0)
-                        e.Graphics.FillEllipse(Brushes.LightGreen, xOffset + x * fieldSize + fieldSize / 16, yOffset + y * fieldSize + fieldSize / 16, fieldSize - fieldSize / 8, fieldSize - fieldSize / 8);
-                }
+                    {
+                        e.Graphics.FillEllipse(Brushes.LightGreen, xOffset + x * fieldSize + fieldSize / 4, yOffset + y * fieldSize + fieldSize / 4, fieldSize - fieldSize / 2, fieldSize - fieldSize / 2);
+                        e.Graphics.DrawString(enclosuresForFields[x, y].Length.ToString(), new Font("Segoe UI Semibold", fontsize), Brushes.Black,
+                            new RectangleF(xOffset + x * fieldSize + fieldSize / 4, yOffset + y * fieldSize + fieldSize / 4, fieldSize - fieldSize / 2, fieldSize - fieldSize / 2),
+                            new StringFormat() { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Center });
+                    }
+                 }
             }
         }
 
@@ -97,6 +104,30 @@ namespace Reversi
         private void ReversiBoard_MouseDown(object sender, MouseEventArgs e)
         {
 
+        }
+
+        private void ReversiBoard_MouseClick(object sender, MouseEventArgs e)
+        {
+            int size = (Width < Height ? Width : Height);
+            int borderSize = size / 30;
+            size -= borderSize * 2;
+            int fieldSize = size / Game.BoardSize;
+            int xOffset = (Width - fieldSize * Game.BoardSize) / 2;
+            int yOffset = (Height - fieldSize * Game.BoardSize) / 2;
+            int realx = e.X - xOffset;
+            int realy = e.Y - yOffset;
+            int fieldx = realx / fieldSize;
+            int fieldy = realy / fieldSize;
+            if (fieldx < 0 || fieldy < 0 || fieldx >= Game.BoardSize || fieldy >= Game.BoardSize)
+                return;
+            ReversiGame.ReversiField[] fields = Game.GetEnclosedFields(fieldx, fieldy, WhichPlayersTurn == Turn.Player1 ? ReversiGame.ReversiField.FieldContent.Player1 : ReversiGame.ReversiField.FieldContent.Player2);
+            if (fields.Length == 0)
+                return;
+            foreach (ReversiGame.ReversiField f in fields)
+                f.Reverse();
+            Game[fieldx, fieldy].Content = WhichPlayersTurn == Turn.Player1 ? ReversiGame.ReversiField.FieldContent.Player1 : ReversiGame.ReversiField.FieldContent.Player2;
+            WhichPlayersTurn = WhichPlayersTurn == Turn.Player1 ? Turn.Player2 : Turn.Player1;
+            Invalidate();
         }
     }
 }

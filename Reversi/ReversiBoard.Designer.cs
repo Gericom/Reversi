@@ -34,10 +34,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(91)))), ((int)(((byte)(36)))));
             this.DoubleBuffered = true;
             this.Name = "ReversiBoard";
             this.Size = new System.Drawing.Size(608, 366);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ReversiBoard_Paint);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ReversiBoard_MouseClick);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ReversiBoard_MouseDown);
             this.Resize += new System.EventHandler(this.ReversiBoard_Resize);
             this.ResumeLayout(false);

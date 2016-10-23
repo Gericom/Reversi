@@ -38,6 +38,10 @@
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.exitMenuItem = new System.Windows.Forms.MenuItem();
             this.reversiBoard2 = new Reversi.ReversiBoard();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -94,14 +98,44 @@
             // 
             // reversiBoard2
             // 
+            this.reversiBoard2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(91)))), ((int)(((byte)(36)))));
             this.reversiBoard2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.reversiBoard2.Game = null;
             this.reversiBoard2.Location = new System.Drawing.Point(0, 0);
             this.reversiBoard2.Name = "reversiBoard2";
             this.reversiBoard2.Player1Color = System.Drawing.Color.Black;
             this.reversiBoard2.Player2Color = System.Drawing.Color.White;
-            this.reversiBoard2.Size = new System.Drawing.Size(617, 464);
+            this.reversiBoard2.Size = new System.Drawing.Size(617, 442);
             this.reversiBoard2.TabIndex = 1;
+            this.reversiBoard2.WhichPlayersTurn = Reversi.ReversiBoard.Turn.Player1;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel2});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 442);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(617, 22);
+            this.statusStrip1.TabIndex = 2;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.AutoSize = false;
+            this.toolStripStatusLabel1.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(100, 17);
+            this.toolStripStatusLabel1.Text = "Player 1:";
+            this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.AutoSize = false;
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(100, 17);
+            this.toolStripStatusLabel2.Text = "Player 2:";
+            this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainForm
             // 
@@ -109,10 +143,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(617, 464);
             this.Controls.Add(this.reversiBoard2);
+            this.Controls.Add(this.statusStrip1);
             this.Menu = this.mainMenu1;
             this.Name = "MainForm";
             this.Text = "Form1";
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -128,6 +166,9 @@
         private System.Windows.Forms.MenuItem menuItem3;
 
         private ReversiBoard reversiBoard2;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 
