@@ -72,19 +72,22 @@ namespace Reversi
 
             bool shouldpass = true;
             int nremptyspaces = 0;
+            int nrmycolor = 0;
             for (int y = 0; y < Game.BoardSize; y++)
             {
                 for (int x = 0; x < Game.BoardSize; x++)
                 {
                     if (Game[x, y].Content == ReversiGame.ReversiField.FieldContent.Empty)
                         nremptyspaces++;
+                    else if (Game[x, y].Content == (WhichPlayersTurn == Turn.Player1 ? ReversiGame.ReversiField.FieldContent.Player1 : ReversiGame.ReversiField.FieldContent.Player2))
+                        nrmycolor++;
                     mEnclosuresForFields[x, y] =
                         Game.GetEnclosedFields(x, y, WhichPlayersTurn == Turn.Player1 ? ReversiGame.ReversiField.FieldContent.Player1 : ReversiGame.ReversiField.FieldContent.Player2);
                     if (mEnclosuresForFields[x, y].Length > 0)
                         shouldpass = false;
                 }
             }
-            if ((mHasPassed || nremptyspaces == 0) && shouldpass && GameEnd != null)
+            if ((mHasPassed || nremptyspaces == 0 || nrmycolor == 0) && shouldpass && GameEnd != null)
                 GameEnd.Invoke();
             else if (shouldpass && PassRequired != null)
                 PassRequired.Invoke();
