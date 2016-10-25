@@ -206,11 +206,6 @@ namespace Reversi
             Invalidate();
         }
 
-        private void ReversiBoard_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
         private void ReversiBoard_MouseClick(object sender, MouseEventArgs e)
         {
             if (mBusyAnimating)
@@ -233,19 +228,6 @@ namespace Reversi
 
             mBusyAnimating = true;
             new Thread(FieldAnimatorThread).Start(fields);
-
-            /*foreach (ReversiGame.ReversiField f in fields)
-                f.Reverse();
-            Game[fieldx, fieldy].Content = WhichPlayersTurn == Turn.Player1 ? ReversiGame.ReversiField.FieldContent.Player1 : ReversiGame.ReversiField.FieldContent.Player2;
-            WhichPlayersTurn = WhichPlayersTurn == Turn.Player1 ? Turn.Player2 : Turn.Player1;
-			mHasPassed = false;
-
-			CalculateFieldEnclosures();
-            if ( PlayerSwitch != null )
-				PlayerSwitch.Invoke(WhichPlayersTurn);
-			
-			
-            Invalidate();*/
         }
 
         private void FieldAnimatorThread(object arg)

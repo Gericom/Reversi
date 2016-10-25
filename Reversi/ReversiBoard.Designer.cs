@@ -40,7 +40,6 @@
             this.Size = new System.Drawing.Size(608, 366);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ReversiBoard_Paint);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ReversiBoard_MouseClick);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ReversiBoard_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ReversiBoard_MouseMove);
             this.Resize += new System.EventHandler(this.ReversiBoard_Resize);
             this.ResumeLayout(false);
