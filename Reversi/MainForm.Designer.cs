@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainMenu1 = new Reversi.MainMenu(this.components);
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.newGameMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem6 = new System.Windows.Forms.MenuItem();
-            this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.optionsMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.exitMenuItem = new System.Windows.Forms.MenuItem();
@@ -56,7 +56,6 @@
             this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.newGameMenuItem,
             this.menuItem6,
-            this.menuItem3,
             this.optionsMenuItem,
             this.menuItem2,
             this.exitMenuItem});
@@ -67,33 +66,28 @@
             this.newGameMenuItem.Index = 0;
             this.newGameMenuItem.Shortcut = System.Windows.Forms.Shortcut.F2;
             this.newGameMenuItem.Text = "New Game";
+            this.newGameMenuItem.Click += new System.EventHandler(this.newGameMenuItem_Click);
             // 
             // menuItem6
             // 
             this.menuItem6.Index = 1;
             this.menuItem6.Text = "-";
             // 
-            // menuItem3
-            // 
-            this.menuItem3.Index = 2;
-            this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.F4;
-            this.menuItem3.Text = "Statistics";
-            // 
             // optionsMenuItem
             // 
-            this.optionsMenuItem.Index = 3;
+            this.optionsMenuItem.Index = 2;
             this.optionsMenuItem.Shortcut = System.Windows.Forms.Shortcut.F5;
             this.optionsMenuItem.Text = "Options";
             this.optionsMenuItem.Click += new System.EventHandler(this.optionsMenuItem_Click);
             // 
             // menuItem2
             // 
-            this.menuItem2.Index = 4;
+            this.menuItem2.Index = 3;
             this.menuItem2.Text = "-";
             // 
             // exitMenuItem
             // 
-            this.exitMenuItem.Index = 5;
+            this.exitMenuItem.Index = 4;
             this.exitMenuItem.Text = "Exit";
             this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
@@ -111,6 +105,8 @@
             this.reversiBoard2.TabIndex = 1;
             this.reversiBoard2.WhichPlayersTurn = Reversi.ReversiBoard.Turn.Player1;
             this.reversiBoard2.PlayerSwitch += new Reversi.ReversiBoard.OnPlayerSwitchEventHandler(this.reversiBoard2_PlayerSwitch);
+            this.reversiBoard2.PassRequired += new Reversi.ReversiBoard.OnPassRequiredEventHandler(this.reversiBoard2_PassRequired);
+            this.reversiBoard2.GameEnd += new Reversi.ReversiBoard.OnGameEndEventHandler(this.reversiBoard2_GameEnd);
             // 
             // statusStrip1
             // 
@@ -128,6 +124,7 @@
             // 
             this.toolStripStatusLabel1.AutoSize = false;
             this.toolStripStatusLabel1.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.toolStripStatusLabel1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripStatusLabel1.Image")));
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(100, 17);
             this.toolStripStatusLabel1.Text = "Player 1: 2";
@@ -137,6 +134,7 @@
             // 
             this.toolStripStatusLabel2.AutoSize = false;
             this.toolStripStatusLabel2.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.toolStripStatusLabel2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripStatusLabel2.Image")));
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(100, 17);
             this.toolStripStatusLabel2.Text = "Player 2: 2";
@@ -158,7 +156,9 @@
             this.ClientSize = new System.Drawing.Size(617, 464);
             this.Controls.Add(this.reversiBoard2);
             this.Controls.Add(this.statusStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Menu = this.mainMenu1;
+            this.MinimumSize = new System.Drawing.Size(200, 200);
             this.Name = "MainForm";
             this.Text = "Reversi";
             this.statusStrip1.ResumeLayout(false);
@@ -177,7 +177,6 @@
         private System.Windows.Forms.MenuItem menuItem2;
         private System.Windows.Forms.MenuItem exitMenuItem;
         private System.Windows.Forms.MenuItem menuItem6;
-        private System.Windows.Forms.MenuItem menuItem3;
 
         private ReversiBoard reversiBoard2;
         private System.Windows.Forms.StatusStrip statusStrip1;
