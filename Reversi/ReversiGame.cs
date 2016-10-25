@@ -119,17 +119,6 @@ namespace Reversi
             return count;
         }
 
-		/*public void GameOver()
-		{
-			if (ReversiField.FieldContent.Player1 > ReversiField.FieldContent.Player2)
-				//show message on screen
-			else
-				//show other message
-
-			//start new game
-		}
-		*/
-
         public ReversiField this[int x, int y]
         {
             get { return mFields[x, y]; }

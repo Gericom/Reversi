@@ -29,6 +29,16 @@ namespace Reversi
             new OptionsForm().ShowDialog();
         }
 
+		private void reversiBoard2_GameEnd()
+		{
+			new VictoryForm().ShowDialog();
+		}
+
+		private void reversiBoard2_PassRequired()
+		{
+			reversiBoard2.PassTurn();
+		}
+
 		private void reversiBoard2_PlayerSwitch(ReversiBoard.Turn newPlayer)
 		{
 			if ( newPlayer == ReversiBoard.Turn.Player1 )

@@ -61,6 +61,8 @@ namespace Reversi
         private void CalculateFieldEnclosures()
         {
             mEnclosuresForFields = new ReversiGame.ReversiField[Game.BoardSize, Game.BoardSize][];
+			
+				
             bool shouldpass = true;
             for (int y = 0; y < Game.BoardSize; y++)
             {
@@ -72,9 +74,14 @@ namespace Reversi
                         shouldpass = false;
                 }
             }
-            if (shouldpass && PassRequired != null)
+			if ( mHasPassed && shouldpass && GameEnd != null )
+				GameEnd.Invoke();
+			else if
+			( shouldpass && PassRequired != null)
                 PassRequired.Invoke();
         }
+
+		
 
         private void GetBoardDimension(out int xOffset, out int yOffset, out int fieldSize, out int fontsize)
 		{
@@ -172,11 +179,29 @@ namespace Reversi
                 f.Reverse();
             Game[fieldx, fieldy].Content = WhichPlayersTurn == Turn.Player1 ? ReversiGame.ReversiField.FieldContent.Player1 : ReversiGame.ReversiField.FieldContent.Player2;
             WhichPlayersTurn = WhichPlayersTurn == Turn.Player1 ? Turn.Player2 : Turn.Player1;
-            CalculateFieldEnclosures();
+			mHasPassed = false;
+
+			CalculateFieldEnclosures();
             if ( PlayerSwitch != null )
 				PlayerSwitch.Invoke(WhichPlayersTurn);
+			
+			
             Invalidate();
         }
+		bool mHasPassed;
+
+		public void PassTurn()
+		{
+
+			mHasPassed = true;
+
+			WhichPlayersTurn = WhichPlayersTurn == Turn.Player1 ? Turn.Player2 : Turn.Player1;
+			CalculateFieldEnclosures();
+			if ( PlayerSwitch != null )
+				PlayerSwitch.Invoke(WhichPlayersTurn);
+			Invalidate();
+
+		}
     }
 }
 
