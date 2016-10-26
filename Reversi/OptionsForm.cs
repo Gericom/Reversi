@@ -23,6 +23,7 @@ namespace Reversi
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
+            //multiple of 2
             numericUpDown1.Value = ((int)numericUpDown1.Value + 1) & ~1;
             BoardSize = (int)numericUpDown1.Value;
         }

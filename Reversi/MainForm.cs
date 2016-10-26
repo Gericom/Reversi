@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,19 +20,26 @@ namespace Reversi
         public MainForm()
         {
             InitializeComponent();
-            Microsoft.Win32.RegistryKey reversi = 
-                Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software", true).CreateSubKey("Florian and Ruben").CreateSubKey("Reversi");
+            //Open or create the registry key containing the board size
+            RegistryKey reversi = 
+                Registry.CurrentUser.OpenSubKey("Software", true).CreateSubKey("Florian and Ruben").CreateSubKey("Reversi");
+            //if it doesn't exist already, set the default value
             if (!reversi.GetValueNames().Contains("BoardSize"))
                 reversi.SetValue("BoardSize", 6);
             else
                 mBoardSize = (int)reversi.GetValue("BoardSize");
+            //multiple of 2
             mBoardSize = (mBoardSize + 1) & ~1;
+            //min 6 max 12
             if (mBoardSize < 6)
                 mBoardSize = 6;
             if (mBoardSize > 12)
                 mBoardSize = 12;
+            //store fixed value in registry
             reversi.SetValue("BoardSize", mBoardSize);
+            //close the registry key
             reversi.Close();
+            //new game
             reversiBoard2.Game = new ReversiGame(mBoardSize);
         }
 
@@ -44,16 +52,19 @@ namespace Reversi
         {
             var o = new OptionsForm(mBoardSize);
             o.ShowDialog();
-            Microsoft.Win32.RegistryKey reversi = 
-                Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software", true).CreateSubKey("Florian and Ruben").CreateSubKey("Reversi");
-            bool different = mBoardSize != o.BoardSize;
-            mBoardSize = o.BoardSize;
-            reversi.SetValue("BoardSize", o.BoardSize);
-            reversi.Close();
-            if (different)
+            if (mBoardSize != o.BoardSize)
+            {
+                //store the new board size value in the registry
+                RegistryKey reversi =
+                    Registry.CurrentUser.OpenSubKey("Software", true).CreateSubKey("Florian and Ruben").CreateSubKey("Reversi");
+                mBoardSize = o.BoardSize;
+                reversi.SetValue("BoardSize", o.BoardSize);
+                reversi.Close();
                 MessageBox.Show("Start a new game to use the new settings", "Settings Changed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
+        //When the game has ended, show the victory screen (with the music (; )
 		private void reversiBoard2_GameEnd()
 		{
             mGameEnded = true;
@@ -80,6 +91,7 @@ namespace Reversi
             new VictoryForm(result, player1count, player2count).ShowDialog();
 		}
 
+        //When a pass is required notify the user about it
 		private void reversiBoard2_PassRequired()
 		{
             if (mGameEnded)
@@ -88,6 +100,7 @@ namespace Reversi
 			    reversiBoard2.PassTurn();
 		}
 
+        //Update the status label when the players switch
 		private void reversiBoard2_PlayerSwitch(ReversiBoard.Turn newPlayer)
 		{
             if (mGameEnded)

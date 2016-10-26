@@ -33,12 +33,14 @@ namespace Reversi
                 label1.Text = "It's a Tie!";
             label2.Text = "" + score1;
             label3.Text = "" + score2;
+            //start the victory music
             mSoundPlayer = new SoundPlayer(Properties.Resources.victory);
             mSoundPlayer.Play();
         }
 
         private void VictoryForm_FormClosed(object sender, FormClosedEventArgs e)
         {
+            //stop the victory music
             mSoundPlayer.Stop();
         }
     }
